@@ -1,0 +1,27 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows you to manually trigger it anytime
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main # Change to 'master' if your default branch is master
+          fetch-depth: 0
+
+      - name: Sync with Upstream
+        uses: aormsby/fork-sync-with-upstream-action@v3.4.3
+        with:
+          upstream_sync_repo: KarlMcCree/Online_Store_Project
+          upstream_sync_branch: main
+          target_sync_branch: main
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
